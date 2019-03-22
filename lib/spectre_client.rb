@@ -4,19 +4,26 @@ require "json"
 
 module SpectreClient
   class Client
-    def initialize(project_name, suite_name, url_base)
+    attr_reader :run_id
+
+    def initialize(project_name, suite_name, url_base, run_id = nil)
+      @project_name = project_name
+      @suite_name = suite_name
       @url_base = url_base
+      @run_id = run_id || create_run['id']
+    end
+
+    def create_run
       request = RestClient::Request.execute(
         method: :post,
         url: "#{@url_base}/runs",
         timeout: 120,
         payload: {
-          project: project_name,
-          suite: suite_name
+          project: @project_name,
+          suite: @suite_name
         }
       )
       response = JSON.parse(request.to_str)
-      @run_id = response['id']
     end
 
     def submit_test(options = {})
