@@ -13,6 +13,10 @@ module SpectreClient
       @run_id = run_id || create_run['id']
     end
 
+    def run_data
+      @run_data || { 'run_id' => @run_id }
+    end
+
     def create_run
       request = RestClient::Request.execute(
         method: :post,
@@ -23,7 +27,7 @@ module SpectreClient
           suite: @suite_name
         }
       )
-      response = JSON.parse(request.to_str)
+      @run_data = JSON.parse(request.to_str)
     end
 
     def submit_test(options = {})
