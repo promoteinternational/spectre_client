@@ -6,10 +6,12 @@ module SpectreClient
   class Client
     attr_reader :run_id
 
-    def initialize(project_name, suite_name, url_base, run_id = nil)
+    def initialize(project_name, suite_name, url_base, run_id = nil, commit = nil, init_from_commit = nil)
       @project_name = project_name
       @suite_name = suite_name
       @url_base = url_base
+      @commit = commit
+      @init_from_commit = init_from_commit
       @run_id = run_id || create_run['id']
     end
 
@@ -24,7 +26,9 @@ module SpectreClient
         timeout: 120,
         payload: {
           project: @project_name,
-          suite: @suite_name
+          suite: @suite_name,
+          commit: @commit,
+          init_from_commit: @init_from_commit,
         }
       )
       @run_data = JSON.parse(request.to_str)
