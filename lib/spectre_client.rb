@@ -23,7 +23,7 @@ module SpectreClient
       request = RestClient::Request.execute(
         method: :post,
         url: "#{@url_base}/runs",
-        timeout: 120,
+        timeout: 300,
         payload: {
           project: @project_name,
           suite: @suite_name,
